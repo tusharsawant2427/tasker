@@ -1,10 +1,13 @@
 import { Button, Card, Grid, TextField } from "@mui/material";
 import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import React from "react";
-import { ACTIONS } from "../App";
+import React, { useContext } from "react";
+import { ACTIONS, DispatchContext, StateContext } from "../App";
 
-const TaskForm = ({ taskValue, dispatch }) => {
+const TaskForm = () => {
+  const state = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+
   const handleChange = (evt) =>
     dispatch({
       type: ACTIONS.UPDATE_TODO_TEXT_FIELD,
@@ -35,7 +38,7 @@ const TaskForm = ({ taskValue, dispatch }) => {
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={8}>
                 <TextField
-                  value={taskValue}
+                  value={state.todo}
                   id="task-input"
                   label="Insert your task"
                   onChange={handleChange}

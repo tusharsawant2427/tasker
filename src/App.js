@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 import { Container } from '@mui/material';
 import Header from './components/Header';
 import TaskForm from './components/TaskForm';
@@ -19,29 +19,33 @@ const createTask = (taskValue) => {
     };
 }
 const todoReducer = (currentState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case ACTIONS.ADD_TODO:
-            return { ...currentState, todos: [...currentState.todos, createTask(currentState.todo)]};
+            return { ...currentState, todos: [...currentState.todos, createTask(currentState.todo)] };
         case ACTIONS.TOGGLE_TODO:
-            const modifiedTodos = currentState.todos.map(todo => todo.id === action.payload.taskId ? { ...todo, isCompleted: !todo.isCompleted } : todo );
+            const modifiedTodos = currentState.todos.map(todo => todo.id === action.payload.taskId ? { ...todo, isCompleted: !todo.isCompleted } : todo);
             return { ...currentState, todos: modifiedTodos };
         case ACTIONS.DELETE_TODO:
             const updatedTodos = currentState.todos.filter(todo => todo.id !== action.payload.taskId);
-            return {...currentState, todos: updatedTodos};
+            return { ...currentState, todos: updatedTodos };
         case ACTIONS.UPDATE_TODO_TEXT_FIELD:
-            return { ...currentState, todo: action.payload.taskValue};
+            return { ...currentState, todo: action.payload.taskValue };
         default: return currentState;
     }
 }
+
+export const StateContext = createContext();
+export const DispatchContext = createContext();
+
 const App = () => {
     const initialTodos = [
         {
-            id: 1, 
+            id: 1,
             value: 'Task 1',
             isCompleted: false
         },
         {
-            id: 2, 
+            id: 2,
             value: 'Task 2',
             isCompleted: true
         }
@@ -50,12 +54,16 @@ const App = () => {
     console.log(state);
     return (
         <div>
-            <Header />
-            <Container maxWidth='lg' sx={{ marginTop: 4 }}>
-                <TaskForm  taskValue={ state.todo } dispatch={ dispatch } />
-                <TaskList tasks = { state.todos } dispatch={ dispatch } />
-            </Container>
-        </div>
+            <StateContext.Provider value={state}>
+                <DispatchContext.Provider value={dispatch}>
+                    <Header />
+                    <Container maxWidth='lg' sx={{ marginTop: 4 }}>
+                        <TaskForm />
+                        <TaskList />
+                    </Container>
+                </DispatchContext.Provider>
+            </StateContext.Provider>
+        </div >
     );
 };
 

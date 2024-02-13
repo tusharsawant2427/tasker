@@ -7,10 +7,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import React from "react";
-import { ACTIONS } from "../App";
+import React, { useContext } from "react";
+import { ACTIONS, DispatchContext } from "../App";
 
-const TaskItem = ({ task, dispatch }) => {
+const TaskItem = ({ task}) => {
+  const dispatch = useContext(DispatchContext);
+
   const handleDelete = (id) =>
     dispatch({ type: ACTIONS.DELETE_TODO, payload: { taskId: id } });
   const handleToggle = (id) =>

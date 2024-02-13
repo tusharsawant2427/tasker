@@ -1,16 +1,19 @@
 import { Card, Grid, List } from "@mui/material";
 
-import React from "react";
+import React, { useContext } from "react";
 import TaskItem from "./TaskItem";
+import { StateContext } from "../App";
 
-const TaskList = ({ tasks, dispatch }) => {
+const TaskList = () => {
+  const state = useContext(StateContext);
+
   return (
     <Grid container justifyContent="center" sx={{ marginTop: 4 }}>
       <Grid item xs={12}>
         <Card sx={{ padding: 1 }} raised="true">
           <List sx={{ padding: 1 }}>
-            {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} dispatch={dispatch} />
+            {state.todos.map((task) => (
+              <TaskItem key={task.id} task={task}/>
             ))}
           </List>
         </Card>
